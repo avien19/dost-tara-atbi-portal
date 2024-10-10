@@ -36,7 +36,6 @@ class ProfileController extends Controller
 
             $filePath = $request->file('photo')->storeAs('users', $fileName, 'public');
 
-            // Update the user's photo column with just the file name
             $user->update(['photo' => $fileName]);
         }
 
