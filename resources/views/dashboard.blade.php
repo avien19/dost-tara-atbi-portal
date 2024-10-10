@@ -11,8 +11,8 @@
             <div class="bg-white shadow rounded-lg p-4">
                 <div class="flex flex-col items-center">
                     <div class="w-20 h-20 bg-gray-300 rounded-full mb-4"></div>
-                    <h3 class="font-semibold text-lg">Paul Elizalde</h3>
-                    <p class="text-sm text-gray-600">Computer Science</p>
+                    <h3 class="font-semibold text-lg">{{auth()->user()->name}}</h3>
+                    <p class="text-sm text-gray-600">{{auth()->user()->role}}</p>
                 </div>
             </div>
         </div>

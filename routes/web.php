@@ -56,4 +56,5 @@ Route::post('/register', [RegisteredUserController::class, 'store'])
     ->middleware('guest')
     ->name('register');
 
+    Route::view('/register-user', 'auth.register');
 require __DIR__.'/auth.php';

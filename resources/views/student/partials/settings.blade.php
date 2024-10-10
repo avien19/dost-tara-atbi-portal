@@ -4,11 +4,11 @@
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700">Full Name</label>
-                <input type="text" value="Paul Elizalde" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                <input type="text" value="{{auth()->user()->name}}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" value="paul.elizalde@example.com" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                <input type="email" value="{{auth()->user()->email}}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
             </div>
         </div>
     </div>
