@@ -11,7 +11,7 @@
                 <div class="bg-white shadow rounded-lg p-4">
                     <div class="flex flex-col items-center">
                         <div class="w-20 h-20 bg-gray-300 rounded-full mb-4 overflow-hidden">
-                            <img src="{{ auth()->user()->photo ? asset('storage/users/' . auth()->user()->photo) : asset('images/default-user.png') }}"
+                            <img src="{{ auth()->user()->photo ? asset('storage/users/' . auth()->user()->photo) : asset('images/default-user-profile-image.png') }}"
                                 alt="user_image" class="w-full h-full object-cover">
                         </div>
                         <h3 class="font-semibold text-lg">{{ auth()->user()->name }}</h3>
