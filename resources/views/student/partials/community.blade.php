@@ -10,7 +10,7 @@
                     <input type="file" id="file-upload" name="photo" class="hidden">
                     <label for="file-upload" class="px-3 py-1 text-sm bg-gray-200 rounded-md cursor-pointer">Attach File</label>
                 </div>
-                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md">Post</button>
+                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-md">Post</button>
             </div>
         </form>
     </div>
@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p class="mb-4">${post.content}</p>
                 ${post.photo ? `<img src="${post.photo}" alt="Post image" class="mb-4 max-w-full h-auto">` : ''}
                 <div class="flex items-center space-x-4">
-                    <button class="text-sm text-blue-500 reply-btn">Reply</button>
-                    <button class="text-sm text-blue-500 like-btn">Like</button>
+                    <button class="text-sm text-green-500 reply-btn">Reply</button>
+                    <button class="text-sm text-green-500 like-btn">Like</button>
                     <span class="text-sm text-gray-500"><span class="replies-count">0</span> replies • <span class="likes-count">0</span> likes</span>
                     ${isOwner ? `
                         <button class="text-sm text-blue-500 edit-btn">Edit</button>
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="reply-form hidden mt-4">
                     <textarea class="w-full p-2 border rounded-md" placeholder="Write your reply..."></textarea>
-                    <button class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md submit-reply">Submit Reply</button>
+                    <button class="mt-2 px-4 py-2 bg-green-500 text-white rounded-md submit-reply">Submit Reply</button>
                 </div>
                 <div class="replies-container mt-4"></div>
             </div>

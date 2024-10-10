@@ -4,11 +4,11 @@
         {{-- <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700">Full Name</label>
-                <input type="text" value="{{auth()->user()->name}}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                <input type="text" value="{{auth()->user()->name}}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-0 px-3 py-2">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" value="{{auth()->user()->email}}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                <input type="email" value="{{auth()->user()->email}}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-0 px-3 py-2">
             </div>
         </div> --}}
         <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="max-w-md mx-auto">
@@ -83,5 +83,5 @@
             </div>
         </div>
     </div>
-    <button class="w-full px-4 py-2 bg-blue-500 text-white rounded-md">Save Changes</button>
+    <button class="w-full px-4 py-2 bg-green-500 text-white rounded-md">Save Changes</button>
 </div>

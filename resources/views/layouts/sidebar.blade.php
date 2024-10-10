@@ -12,15 +12,15 @@
     <nav class="mt-6">
         @php
         $menuItems = [
-            ['name' => 'Dashboard', 'icon' => 'book', 'tab' => 'dashboard'],
-            ['name' => 'Mentors', 'icon' => 'users', 'tab' => 'mentors'],
+            ['name' => 'Dashboard', 'icon' => 'home', 'tab' => 'dashboard'],
+            ['name' => 'Mentors', 'icon' => 'user-group', 'tab' => 'mentors'],
             ['name' => 'Appointments', 'icon' => 'calendar', 'tab' => 'appointments'],
             ['name' => 'Feedback', 'icon' => 'star', 'tab' => 'feedback'],
-            ['name' => 'Classroom', 'icon' => 'book', 'tab' => 'classroom'],
-            ['name' => 'Documents', 'icon' => 'file-text', 'tab' => 'documents'],
-            ['name' => 'Community', 'icon' => 'message-square', 'tab' => 'community'],
-            ['name' => 'Team Chart', 'icon' => 'git-branch', 'tab' => 'teamchart'],
-            ['name' => 'Settings', 'icon' => 'settings', 'tab' => 'settings'],
+            ['name' => 'Classroom', 'icon' => 'book-open', 'tab' => 'classroom'],
+            ['name' => 'Documents', 'icon' => 'document', 'tab' => 'documents'],
+            ['name' => 'Community', 'icon' => 'chat', 'tab' => 'community'],
+            ['name' => 'Team Chart', 'icon' => 'project-diagram', 'tab' => 'teamchart'],
+            ['name' => 'Settings', 'icon' => 'cog', 'tab' => 'settings'],
         ];
         @endphp
 
@@ -30,7 +30,7 @@
                 class="flex items-center w-full px-6 py-3 text-left"
                 :class="{'bg-blue-500 text-white': activeTab === '{{ $item['tab'] }}', 'text-gray-600 hover:bg-gray-100': activeTab !== '{{ $item['tab'] }}'}"
             >
-                <i data-lucide="{{ $item['icon'] }}" class="h-5 w-5 mr-3"></i>
+                <circum-icon name="{{ $item['icon'] }}" class="h-5 w-5 mr-3"></circum-icon>
                 <span>{{ $item['name'] }}</span>
             </button>
         @endforeach
