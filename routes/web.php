@@ -12,7 +12,7 @@ use App\Http\Controllers\Student\CommunityController;
 use App\Http\Controllers\Student\TeamChartController;
 use App\Http\Controllers\Student\SettingsController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-
+use App\Http\Controllers\ForumPostController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,6 +46,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/community', [CommunityController::class, 'index'])->name('community');
     Route::get('/teamchart', [TeamChartController::class, 'index'])->name('teamchart');
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::get('/community', [ForumPostController::class, 'index'])->name('community.index');
+    Route::post('/community', [ForumPostController::class, 'store'])->name('community.store');
+    Route::put('/community/{post}', [ForumPostController::class, 'update'])->name('community.update');
+    Route::delete('/community/{post}', [ForumPostController::class, 'destroy'])->name('community.destroy');
 });
     Route::get('/classroom', [ClassroomController::class, 'index'])->name('classroom');
 Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -57,3 +61,14 @@ Route::post('/register', [RegisteredUserController::class, 'store'])
     ->name('register');
 
 require __DIR__.'/auth.php';
+Route::middleware(['auth'])->group(function () {
+    Route::resource('community', ForumPostController::class);
+    Route::get('/community', [ForumPostController::class, 'index'])->name('community.index');
+    Route::post('/community', [ForumPostController::class, 'store'])->name('community.store');
+    Route::post('/community/{post}/reply', [ForumPostController::class, 'reply'])->name('community.reply');
+    Route::post('/community/{post}/like', [ForumPostController::class, 'like'])->name('community.like');
+});
+
+require __DIR__.'/auth.php';
+
+Route::post('/community/{post}/like', [ForumPostController::class, 'like'])->name('community.like');
