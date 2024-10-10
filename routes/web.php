@@ -69,6 +69,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/community/{post}/like', [ForumPostController::class, 'like'])->name('community.like');
 });
 
-require __DIR__.'/auth.php';
+// require __DIR__.'/auth.php';
 
 Route::post('/community/{post}/like', [ForumPostController::class, 'like'])->name('community.like');
