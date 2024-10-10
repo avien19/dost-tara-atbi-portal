@@ -50,10 +50,12 @@ class ForumPostController extends Controller
         $this->authorize('update', $post);
 
         $request->validate([
+            'title' => 'required|max:255',
             'content' => 'required',
-            'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $post->title = $request->title;
         $post->content = $request->content;
 
         if ($request->hasFile('photo')) {

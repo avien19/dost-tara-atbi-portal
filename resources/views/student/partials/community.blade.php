@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function createPostHTML(post) {
+        const isOwner = post.user_id === {{ auth()->id() }};
         return `
             <div class="bg-white p-4 rounded-lg shadow" data-post-id="${post.id}">
                 <div class="flex items-center space-x-2 mb-2">
@@ -68,6 +69,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     <button class="text-sm text-blue-500 reply-btn">Reply</button>
                     <button class="text-sm text-blue-500 like-btn">Like</button>
                     <span class="text-sm text-gray-500"><span class="replies-count">0</span> replies • <span class="likes-count">0</span> likes</span>
+                    ${isOwner ? `
+                        <button class="text-sm text-blue-500 edit-btn">Edit</button>
+                        <button class="text-sm text-red-500 delete-btn">Delete</button>
+                    ` : ''}
                 </div>
                 <div class="reply-form hidden mt-4">
                     <textarea class="w-full p-2 border rounded-md" placeholder="Write your reply..."></textarea>
@@ -80,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     postsContainer.addEventListener('click', function(e) {
         const postElement = e.target.closest('[data-post-id]');
+        if (!postElement) return;
         const postId = postElement.dataset.postId;
 
         if (e.target.classList.contains('reply-btn')) {
@@ -90,6 +96,10 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (e.target.classList.contains('submit-reply')) {
             const replyContent = postElement.querySelector('.reply-form textarea').value;
             submitReply(postId, replyContent, e.target);
+        } else if (e.target.classList.contains('edit-btn')) {
+            editPost(postId, postElement);
+        } else if (e.target.classList.contains('delete-btn')) {
+            deletePost(postId, postElement);
         }
     });
 
@@ -129,6 +139,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 submitButton.closest('.reply-form').classList.add('hidden');
                 submitButton.closest('.reply-form').querySelector('textarea').value = '';
                 updateRepliesCount(submitButton.closest('[data-post-id]'));
+            } else {
+                console.error('Error submitting reply:', data.message);
             }
         })
         .catch(error => console.error('Error:', error));
@@ -147,6 +159,54 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateRepliesCount(postElement) {
         const repliesCount = postElement.querySelectorAll('.replies-container > div').length;
         postElement.querySelector('.replies-count').textContent = repliesCount;
+    }
+
+    function editPost(postId, postElement) {
+        const contentElement = postElement.querySelector('p');
+        const titleElement = postElement.querySelector('h3');
+        const content = contentElement.textContent;
+        const title = titleElement.textContent;
+        const newContent = prompt('Edit your post content:', content);
+        const newTitle = prompt('Edit your post title:', title);
+        if ((newContent !== null && newContent !== content) || (newTitle !== null && newTitle !== title)) {
+            fetch(`/community/${postId}`, {
+                method: 'PUT',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: newContent, title: newTitle })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    contentElement.textContent = newContent;
+                    titleElement.textContent = newTitle;
+                } else {
+                    console.error('Error updating post:', data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+
+    function deletePost(postId, postElement) {
+        if (confirm('Are you sure you want to delete this post?')) {
+            fetch(`/community/${postId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    postElement.remove();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
     }
 
     // Load existing posts
