@@ -50,6 +50,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/community', [ForumPostController::class, 'store'])->name('community.store');
     Route::put('/community/{post}', [ForumPostController::class, 'update'])->name('community.update');
     Route::delete('/community/{post}', [ForumPostController::class, 'destroy'])->name('community.destroy');
+    Route::post('/community/{post}/reply', [ForumPostController::class, 'reply'])->name('community.reply');
+    Route::post('/community/{post}/like', [ForumPostController::class, 'like'])->name('community.like');
 });
     Route::get('/classroom', [ClassroomController::class, 'index'])->name('classroom');
 Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -62,9 +64,10 @@ Route::post('/register', [RegisteredUserController::class, 'store'])
 
 require __DIR__.'/auth.php';
 Route::middleware(['auth'])->group(function () {
-    Route::resource('community', ForumPostController::class);
     Route::get('/community', [ForumPostController::class, 'index'])->name('community.index');
     Route::post('/community', [ForumPostController::class, 'store'])->name('community.store');
+    Route::put('/community/{post}', [ForumPostController::class, 'update'])->name('community.update');
+    Route::delete('/community/{post}', [ForumPostController::class, 'destroy'])->name('community.destroy');
     Route::post('/community/{post}/reply', [ForumPostController::class, 'reply'])->name('community.reply');
     Route::post('/community/{post}/like', [ForumPostController::class, 'like'])->name('community.like');
 });
