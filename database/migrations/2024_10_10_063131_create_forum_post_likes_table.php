@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('forum_post_likes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('forum_post_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
+            $table->unique(['forum_post_id', 'user_id']);
         });
     }
 

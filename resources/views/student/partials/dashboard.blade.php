@@ -10,7 +10,7 @@
                 <div class="flex items-center space-x-2">
                     <i data-feather="calendar" class="h-4 w-4 text-primary"></i>
                     <span class="text-sm">Today, 2:00 PM</span>
-                    <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         <i data-feather="video" class="h-4 w-4"></i>
                     </button>
                 </div>
@@ -23,13 +23,13 @@
                 <div class="flex items-center space-x-2">
                     <i data-feather="calendar" class="h-4 w-4 text-primary"></i>
                     <span class="text-sm">Tomorrow, 4:00 PM</span>
-                    <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         <i data-feather="video" class="h-4 w-4"></i>
                     </button>
                 </div>
             </li>
         </ul>
-        <button class="mt-4 w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <button class="mt-4 w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
             View All Appointments
         </button>
     </div>
@@ -59,7 +59,8 @@
                 <p class="text-sm text-gray-600">Good normalization, consider optimizing queries further.</p>
             </div>
         </div>
-        <button class="mt-4 w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+     
+        <button class="mt-4 w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
             View All Feedback
         </button>
     </div>
@@ -69,18 +70,18 @@
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <span class="text-sm font-medium">React Fundamentals Project</span>
-                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Submitted</span>
+                <span class="px-4 py-2 text-xs font-semibold rounded bg-green-100 text-green-800">Submitted</span>
             </div>
             <div class="flex items-center justify-between">
                 <span class="text-sm font-medium">Advanced JavaScript Quiz</span>
-                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                <span class="px-4 py-2 text-xs font-semibold rounded bg-yellow-100 text-yellow-800">Pending</span>
             </div>
             <div class="flex items-center justify-between">
                 <span class="text-sm font-medium">Node.js API Project</span>
-                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Not Submitted</span>
+                <span class="px-4 py-2 text-xs font-semibold rounded bg-red-100 text-red-800">Not Submitted</span>
             </div>
         </div>
-        <button class="mt-4 w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <button class="mt-4 w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
             View All Assignments
         </button>
     </div>

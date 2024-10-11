@@ -9,13 +9,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $dashboardData = [
-            'appointments' => $this->getUpcomingAppointments(),
-            'feedback' => $this->getRecentFeedback(),
-            'submissions' => $this->getSubmissionStatus(),
-        ];
-
-        return view('dashboard', compact('dashboardData'));
+        // Your logic here
+        return view('dashboard');
     }
 
     private function getUpcomingAppointments()

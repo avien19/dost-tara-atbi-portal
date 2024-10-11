@@ -2,13 +2,16 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
+    
+
+    <form method="POST" action="{{ route('login') }}" class="max-w-md mx-auto p-6 bg-white rounded-full">
+    <h2 class="text-2xl font-bold mb-4 text-center">Welcome Back!</h2>
         @csrf
 
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <x-text-input id="email" class="block mt-1 w-full py-3 px-4" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -16,7 +19,7 @@
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
 
-            <x-text-input id="password" class="block mt-1 w-full"
+            <x-text-input id="password" class="block mt-1 w-full py-3 px-4"
                             type="password"
                             name="password"
                             required autocomplete="current-password" />
@@ -39,7 +42,7 @@
                 </a>
             @endif
 
-            <x-primary-button class="ms-3">
+            <x-primary-button class="ms-3 bg-green-500 hover:bg-green-600 focus:ring-green-300">
                 {{ __('Log in') }}
             </x-primary-button>
         </div>

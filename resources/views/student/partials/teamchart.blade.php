@@ -1,7 +1,7 @@
 <div class="space-y-4">
     <div class="flex justify-between items-center">
         <h3 class="text-lg font-semibold">Current Team Structure</h3>
-        <button class="px-4 py-2 bg-blue-500 text-white rounded-md">
+        <button class="px-4 py-2 bg-green-500 text-white rounded-md">
             <i data-lucide="git-branch" class="inline-block w-4 h-4 mr-2"></i>
             Edit Chart
         </button>
