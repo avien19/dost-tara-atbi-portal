@@ -10,15 +10,7 @@
     mentorRequests: {{ json_encode($mentorRequests) }},
     documents: {{ json_encode($documents) }},
     messages: {{ json_encode($messages) }},
-    menuItems: [
-        { name: 'Dashboard', icon: 'bar-chart', tab: 'dashboard' },
-        { name: 'Students & Teams', icon: 'users', tab: 'students' },
-        { name: 'Classrooms', icon: 'school', tab: 'classrooms' },
-        { name: 'Mentor Requests', icon: 'user-plus', tab: 'mentorRequests' },
-        { name: 'Documents', icon: 'file-text', tab: 'documents' },
-        { name: 'Messages', icon: 'message-square', tab: 'messages' },
-        { name: 'Settings', icon: 'settings', tab: 'settings' }
-    ],
+    menuItems: {{ json_encode($menuItems) }},
     handleMentorRequestApproval(requestId) {
         const request = this.mentorRequests.find(req => req.id === requestId);
         if (request) {
@@ -36,7 +28,7 @@
     }
 }" class="flex h-screen bg-gray-100">
     <!-- Sidebar -->
-    @include('admin.partials.sidebar', ['menuItems' => $menuItems])
+    @include('admin.partials.sidebar')
 
     <!-- Main content -->
     <div class="flex-1 flex flex-col overflow-hidden">
@@ -44,13 +36,27 @@
 
         <main class="flex-1 overflow-auto bg-gray-50">
             <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                @include('admin.partials.dashboard')
-                @include('admin.partials.students')
-                @include('admin.partials.classrooms')
-                @include('admin.partials.mentor-requests')
-                @include('admin.partials.documents')
-                @include('admin.partials.messages')
-                @include('admin.partials.settings')
+                <div x-show="activeTab === 'dashboard'">
+                    @include('admin.partials.dashboard')
+                </div>
+                <div x-show="activeTab === 'students'">
+                    @include('admin.partials.students')
+                </div>
+                <div x-show="activeTab === 'classrooms'">
+                    @include('admin.partials.classrooms')
+                </div>
+                <div x-show="activeTab === 'mentorRequests'">
+                    @include('admin.partials.mentor-requests')
+                </div>
+                <div x-show="activeTab === 'documents'">
+                    @include('admin.partials.documents')
+                </div>
+                <div x-show="activeTab === 'messages'">
+                    @include('admin.partials.messages')
+                </div>
+                <div x-show="activeTab === 'settings'">
+                    @include('admin.partials.settings')
+                </div>
             </div>
         </main>
     </div>

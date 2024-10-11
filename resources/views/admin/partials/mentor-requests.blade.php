@@ -12,22 +12,23 @@
             </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-            @foreach ($mentorRequests as $request)
+            <template x-for="request in mentorRequests" :key="request.id">
                 <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $request['student'] }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $request['team'] }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $request['requestedMentor'] }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap" x-text="request.student"></td>
+                    <td class="px-6 py-4 whitespace-nowrap" x-text="request.team"></td>
+                    <td class="px-6 py-4 whitespace-nowrap" x-text="request.requestedMentor"></td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                            {{ $request['status'] }}
-                        </span>
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                              :class="request.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'"
+                              x-text="request.status"></span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button @click="handleMentorRequestApproval({{ $request['id'] }})" class="text-indigo-600 hover:text-indigo-900 mr-2">Approve</button>
+                        <button @click="handleMentorRequestApproval(request.id)" 
+                                class="text-indigo-600 hover:text-indigo-900 mr-2">Approve</button>
                         <button class="text-red-600 hover:text-red-900">Reject</button>
                     </td>
                 </tr>
-            @endforeach
+            </template>
         </tbody>
     </table>
 </div>

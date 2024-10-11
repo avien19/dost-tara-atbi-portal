@@ -4,29 +4,29 @@
         <p class="text-sm text-muted-foreground">Admin Dashboard</p>
     </div>
     <div class="p-4">
-        <div class="bg-white shadow rounded-lg p-4 flex flex-col items-center">
-            <div class="w-20 h-20 rounded-full bg-gray-200 mb-4"></div>
+        <div class="p-4 flex flex-col items-center">
+            <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold mb-4">
+                AU
+            </div>
             <h3 class="font-semibold text-lg">Admin User</h3>
-            <p class="text-sm text-muted-foreground">System Administrator</p>
+            <p class="text-sm text-gray-500">System Administrator</p>
         </div>
     </div>
-    <div class="flex-grow">
-        <nav class="mt-6 px-4">
-            @foreach ($menuItems as $item)
-                <button
-                    @click="activeTab = '{{ $item['tab'] }}'"
-                    class="flex items-center w-full px-4 py-3 mb-2 transition-colors rounded-lg"
-                    :class="activeTab === '{{ $item['tab'] }}' ? 'bg-primary text-primary-foreground' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'"
-                >
-                    <i data-lucide="{{ $item['icon'] }}" class="h-5 w-5 mr-3"></i>
-                    <span>{{ $item['name'] }}</span>
-                </button>
-            @endforeach
-        </nav>
-    </div>
+    <nav class="mt-6 px-4">
+        <template x-for="item in menuItems" :key="item.name">
+            <button
+                @click="activeTab = item.tab"
+                class="flex items-center w-full px-4 py-3 mb-2 transition-colors rounded-lg"
+                :class="activeTab === item.tab ? 'bg-primary text-primary-foreground' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'"
+            >
+                <i :data-lucide="item.icon" class="h-5 w-5 mr-3"></i>
+                <span x-text="item.name"></span>
+            </button>
+        </template>
+    </nav>
     <div class="p-4">
         <hr class="my-4">
-        <button class="flex items-center w-full px-4 py-2 text-left text-gray-600 hover:bg-gray-100 hover:text-gray-800 rounded-lg">
+        <button class="flex items-center w-full px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800 rounded-lg">
             <i data-lucide="log-out" class="h-5 w-5 mr-3"></i>
             <span>Log out</span>
         </button>

@@ -79,7 +79,8 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/community/{post}/like', [ForumPostController::class, 'like'])->name('community.like');
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::post('/mentor-requests/{requestId}/approve', [AdminController::class, 'handleMentorRequestApproval'])->name('admin.mentorRequests.approve');
+    Route::post('/admin/mentor-requests/{id}/approve', [AdminController::class, 'approveMentorRequest'])->name('admin.mentorRequests.approve');
+    Route::post('/admin/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
 });
 
 Route::middleware(['auth'])->group(function () {
