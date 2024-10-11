@@ -75,3 +75,8 @@ Route::middleware(['auth'])->group(function () {
 // require __DIR__.'/auth.php';
 
 Route::post('/community/{post}/like', [ForumPostController::class, 'like'])->name('community.like');
+
+Route::get('/community/{reply}/edit', [ForumPostController::class, 'editReply'])->name('community.reply.edit');
+Route::put('/community/reply/{reply}', [ForumPostController::class, 'updateReply'])->name('community.reply.update');
+Route::delete('/community/{reply}', [ForumPostController::class, 'deleteReply'])->name('community.reply.delete');
+Route::delete('/community/reply/{reply}', [ForumPostController::class, 'deleteReply'])->name('community.reply.delete');

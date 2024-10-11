@@ -53,6 +53,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function createPostHTML(post) {
         const isOwner = post.user_id === {{ auth()->id() }};
+        let repliesHTML = '';
+        if (post.replies && post.replies.length > 0) {
+            repliesHTML = post.replies.map(reply => createReplyHTML(reply)).join('');
+        }
+        const repliesCount = post.replies_count !== undefined ? post.replies_count : 0;
+        
         return `
             <div class="bg-white p-4 rounded-lg shadow" data-post-id="${post.id}">
                 <div class="flex items-center space-x-2 mb-2">
@@ -67,8 +73,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${post.photo ? `<img src="${post.photo}" alt="Post image" class="mb-4 max-w-full h-auto">` : ''}
                 <div class="flex items-center space-x-4">
                     <button class="text-sm text-green-500 reply-btn">Reply</button>
-                    <button class="text-sm text-green-500 like-btn">Like</button>
-                    <span class="text-sm text-gray-500"><span class="replies-count">0</span> replies • <span class="likes-count">0</span> likes</span>
+                    <button class="text-sm text-green-500 like-btn">${post.liked ? 'Unlike' : 'Like'}</button>
+                    <span class="text-sm text-gray-500"><span class="replies-count">${repliesCount}</span> replies • <span class="likes-count">${post.likes_count || 0}</span> likes</span>
                     ${isOwner ? `
                         <button class="text-sm text-blue-500 edit-btn">Edit</button>
                         <button class="text-sm text-red-500 delete-btn">Delete</button>
@@ -78,7 +84,44 @@ document.addEventListener('DOMContentLoaded', function() {
                     <textarea class="w-full p-2 border rounded-md" placeholder="Write your reply..."></textarea>
                     <button class="mt-2 px-4 py-2 bg-green-500 text-white rounded-md submit-reply">Submit Reply</button>
                 </div>
-                <div class="replies-container mt-4"></div>
+                <div class="replies-container mt-4">
+                    ${repliesHTML}
+                </div>
+            </div>
+        `;
+    }
+
+    function createReplyHTML(reply) {
+        const isOwner = reply.user_id === {{ auth()->id() }};
+        return `
+            <div class="bg-gray-100 p-3 rounded-md mt-2 relative" data-reply-id="${reply.id}">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="font-semibold">${reply.user.name}</p>
+                        <p class="reply-content">${reply.content}</p>
+                        <p class="text-xs text-gray-500">${new Date(reply.created_at).toLocaleString()}</p>
+                    </div>
+                    ${isOwner ? `
+                        <div class="relative">
+                            <button class="text-gray-500 hover:text-gray-700 dropdown-toggle">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                                </svg>
+                            </button>
+                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden dropdown-menu">
+                                <button class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left edit-reply-btn">Edit</button>
+                                <button class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left delete-reply-btn">Delete</button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="edit-controls hidden mt-2">
+                    <textarea class="w-full p-2 border rounded-md edit-reply-textarea"></textarea>
+                    <div class="mt-2">
+                        <button class="px-4 py-2 bg-green-500 text-white rounded-md update-reply-btn">Update</button>
+                        <button class="px-4 py-2 bg-gray-500 text-white rounded-md ml-2 cancel-edit-btn">Cancel</button>
+                    </div>
+                </div>
             </div>
         `;
     }
@@ -94,6 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (e.target.classList.contains('like-btn')) {
             likePost(postId, e.target);
         } else if (e.target.classList.contains('submit-reply')) {
+            const postElement = e.target.closest('[data-post-id]');
+            const postId = postElement.dataset.postId;
             const replyContent = postElement.querySelector('.reply-form textarea').value;
             submitReply(postId, replyContent, e.target);
         } else if (e.target.classList.contains('edit-btn')) {
@@ -114,7 +159,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const likesCountElement = likeButton.closest('[data-post-id]').querySelector('.likes-count');
+                const postElement = likeButton.closest('[data-post-id]');
+                const likesCountElement = postElement.querySelector('.likes-count');
                 likesCountElement.textContent = data.likesCount;
                 likeButton.textContent = data.liked ? 'Unlike' : 'Like';
             }
@@ -134,11 +180,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const repliesContainer = submitButton.closest('[data-post-id]').querySelector('.replies-container');
+                const postElement = submitButton.closest('[data-post-id]');
+                const repliesContainer = postElement.querySelector('.replies-container');
                 repliesContainer.insertAdjacentHTML('beforeend', createReplyHTML(data.reply));
                 submitButton.closest('.reply-form').classList.add('hidden');
                 submitButton.closest('.reply-form').querySelector('textarea').value = '';
-                updateRepliesCount(submitButton.closest('[data-post-id]'));
+                updateRepliesCount(postElement, data.repliesCount);
             } else {
                 console.error('Error submitting reply:', data.message);
             }
@@ -146,19 +193,11 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error:', error));
     }
 
-    function createReplyHTML(reply) {
-        return `
-            <div class="bg-gray-100 p-3 rounded-md mt-2">
-                <p class="font-semibold">${reply.user.name}</p>
-                <p>${reply.content}</p>
-                <p class="text-xs text-gray-500">${new Date(reply.created_at).toLocaleString()}</p>
-            </div>
-        `;
-    }
-
-    function updateRepliesCount(postElement) {
-        const repliesCount = postElement.querySelectorAll('.replies-container > div').length;
-        postElement.querySelector('.replies-count').textContent = repliesCount;
+    function updateRepliesCount(postElement, count) {
+        const repliesCountElement = postElement.querySelector('.replies-count');
+        if (repliesCountElement) {
+            repliesCountElement.textContent = count;
+        }
     }
 
     function editPost(postId, postElement) {
@@ -209,11 +248,91 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function toggleDropdown(dropdownToggle) {
+        const dropdownMenu = dropdownToggle.nextElementSibling;
+        dropdownMenu.classList.toggle('hidden');
+    }
+
+    function editReply(replyId, replyElement) {
+        const contentElement = replyElement.querySelector('.reply-content');
+        const editControls = replyElement.querySelector('.edit-controls');
+        const textarea = editControls.querySelector('.edit-reply-textarea');
+        
+        textarea.value = contentElement.textContent.trim();
+        contentElement.classList.add('hidden');
+        editControls.classList.remove('hidden');
+    }
+
+    function cancelEdit(replyElement) {
+        const contentElement = replyElement.querySelector('.reply-content');
+        const editControls = replyElement.querySelector('.edit-controls');
+        
+        contentElement.classList.remove('hidden');
+        editControls.classList.add('hidden');
+    }
+
+    function updateReply(replyId, content, replyElement) {
+        fetch(`/community/reply/${replyId}`, {  // Update this line
+            method: 'PUT',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content: content })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const contentElement = replyElement.querySelector('.reply-content');
+                contentElement.textContent = data.reply.content;
+                cancelEdit(replyElement);
+            } else {
+                console.error('Error updating reply:', data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Update the event listener
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.dropdown-toggle')) {
+            const dropdownToggle = e.target.closest('.dropdown-toggle');
+            toggleDropdown(dropdownToggle);
+        } else {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.add('hidden'));
+        }
+
+        if (e.target.closest('.edit-reply-btn')) {
+            const replyElement = e.target.closest('[data-reply-id]');
+            const replyId = replyElement.dataset.replyId;
+            editReply(replyId, replyElement);
+        }
+
+        if (e.target.closest('.update-reply-btn')) {
+            const replyElement = e.target.closest('[data-reply-id]');
+            const replyId = replyElement.dataset.replyId;
+            const content = replyElement.querySelector('.edit-reply-textarea').value;
+            updateReply(replyId, content, replyElement);
+        }
+
+        if (e.target.closest('.cancel-edit-btn')) {
+            const replyElement = e.target.closest('[data-reply-id]');
+            cancelEdit(replyElement);
+        }
+
+        if (e.target.closest('.delete-reply-btn')) {
+            const replyElement = e.target.closest('[data-reply-id]');
+            const replyId = replyElement.dataset.replyId;
+            deleteReply(replyId, replyElement);
+        }
+    });
+
     // Load existing posts
     fetch('{{ route("community.index") }}')
         .then(response => response.json())
         .then(data => {
             data.posts.forEach(post => {
+                post.liked = post.likes.some(like => like.id === {{ auth()->id() }});
                 postsContainer.insertAdjacentHTML('beforeend', createPostHTML(post));
             });
         })
@@ -221,5 +340,46 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             alert('An error occurred while loading posts.');
         });
+
+    function deleteReply(replyId, replyElement) {
+        if (confirm('Are you sure you want to delete this reply?')) {
+            fetch(`/community/reply/${replyId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const postElement = replyElement.closest('[data-post-id]');
+                    replyElement.remove();
+                    updateRepliesCount(postElement, data.repliesCount);
+                } else {
+                    console.error('Error deleting reply:', data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+
+    // Make sure this function is also defined
+    function updateRepliesCount(postElement, count) {
+        const repliesCountElement = postElement.querySelector('.replies-count');
+        if (repliesCountElement) {
+            repliesCountElement.textContent = count;
+        }
+    }
 });
 </script>
+
+<style>
+    .dropdown-menu {
+        z-index: 10;
+    }
+    .dropdown-toggle:focus + .dropdown-menu,
+    .dropdown-menu:hover {
+        display: block;
+    }
+</style>
