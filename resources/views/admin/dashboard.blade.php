@@ -34,31 +34,34 @@
     <div class="flex-1 flex flex-col overflow-hidden">
         @include('admin.partials.header')
 
-        <main class="flex-1 overflow-auto bg-gray-50">
-            <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                <div x-show="activeTab === 'dashboard'">
-                    @include('admin.partials.dashboard')
-                </div>
-                <div x-show="activeTab === 'students'">
-                    @include('admin.partials.students')
-                </div>
-                <div x-show="activeTab === 'classrooms'">
-                    @include('admin.partials.classrooms')
-                </div>
-                <div x-show="activeTab === 'mentorRequests'">
-                    @include('admin.partials.mentor-requests')
-                </div>
-                <div x-show="activeTab === 'documents'">
-                    @include('admin.partials.documents')
-                </div>
-                <div x-show="activeTab === 'messages'">
-                    @include('admin.partials.messages')
-                </div>
-                <div x-show="activeTab === 'settings'">
-                    @include('admin.partials.settings')
-                </div>
+            <main class="flex-1 overflow-auto bg-gray-50">
+        <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <div x-show="activeTab === 'dashboard'">
+                @include('admin.partials.dashboard')
             </div>
-        </main>
+            <div x-show="activeTab === 'students'">
+                @include('admin.partials.students')
+            </div>
+            <div x-show="activeTab === 'classrooms'">
+                @include('admin.partials.classrooms')
+            </div>
+            <div x-show="activeTab === 'mentorRequests'">
+                @include('admin.partials.mentor-requests')
+            </div>
+            <div x-show="activeTab === 'documents'">
+                @include('admin.partials.documents')
+            </div>
+            <div x-show="activeTab === 'messages'">
+                @include('admin.partials.messages')
+            </div>
+            <div x-show="activeTab === 'mentors'">
+                @include('admin.partials.mentors')
+            </div>
+            <div x-show="activeTab === 'settings'">
+                @include('admin.partials.settings')
+            </div>
+        </div>
+    </main>
     </div>
 </div>
 @endsection

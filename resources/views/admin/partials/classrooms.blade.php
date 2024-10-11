@@ -24,6 +24,7 @@
         </template>
     </div>
 
+    <!-- Classroom Details Modal -->
     <div x-show="selectedClassroom" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" x-cloak>
         <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-2/3 shadow-lg rounded-md bg-white">
             <div class="mt-3">

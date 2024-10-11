@@ -8,7 +8,7 @@
             </div>
             <div class="flex justify-between items-center">
                 <span class="text-sm font-medium">Active Students</span>
-                <span class="text-2xl font-bold">{{ $teams->sum(function($team) { return count($team['members']); }) }}</span>
+                <span class="text-2xl font-bold">{{ array_sum(array_map(function($team) { return count($team['members']); }, $teams)) }}</span>
             </div>
             <div class="flex justify-between items-center">
                 <span class="text-sm font-medium">Classrooms</span>
@@ -19,7 +19,12 @@
     <div class="bg-white shadow rounded-lg p-6">
         <h3 class="text-lg font-semibold mb-4">Recent Activities</h3>
         <div class="space-y-4">
-            <!-- Add recent activities here -->
+            @foreach($recentActivities as $activity)
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium">{{ $activity['action'] }}</span>
+                    <span class="text-xs text-gray-500">{{ $activity['time'] }}</span>
+                </div>
+            @endforeach
         </div>
     </div>
     <div class="bg-white shadow rounded-lg p-6">
