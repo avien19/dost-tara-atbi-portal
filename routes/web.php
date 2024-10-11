@@ -13,6 +13,8 @@ use App\Http\Controllers\Student\TeamChartController;
 use App\Http\Controllers\Student\SettingsController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ForumPostController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,7 +30,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -37,7 +39,7 @@ Route::middleware('auth')->group(function () {
 });
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments');
     Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback');
@@ -75,7 +77,18 @@ Route::middleware(['auth'])->group(function () {
 // require __DIR__.'/auth.php';
 
 Route::post('/community/{post}/like', [ForumPostController::class, 'like'])->name('community.like');
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::post('/mentor-requests/{requestId}/approve', [AdminController::class, 'handleMentorRequestApproval'])->name('admin.mentorRequests.approve');
+});
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+});
 Route::get('/community/{reply}/edit', [ForumPostController::class, 'editReply'])->name('community.reply.edit');
 Route::put('/community/reply/{reply}', [ForumPostController::class, 'updateReply'])->name('community.reply.update');
 Route::delete('/community/{reply}', [ForumPostController::class, 'deleteReply'])->name('community.reply.delete');
