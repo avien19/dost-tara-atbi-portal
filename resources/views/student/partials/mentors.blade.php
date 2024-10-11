@@ -16,7 +16,7 @@
                 <div class="flex items-center mb-4">
                     <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white text-xl font-bold mr-4">
                         {{ substr($mentor, 0, 1) }}
-                    </div>
+                    </div>  
                     <div>
                         <h4 class="font-semibold">{{ $mentor }}</h4>
                         <p class="text-sm text-gray-600">Expert in React, Node.js</p>
