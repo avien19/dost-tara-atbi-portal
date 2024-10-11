@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ForumPost;
+use App\Models\ForumReply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -10,7 +11,10 @@ class ForumPostController extends Controller
 {
     public function index()
     {
-        $posts = ForumPost::with('user')->latest()->get();
+        $posts = ForumPost::with(['user', 'replies.user'])
+            ->withCount('likes', 'replies')
+            ->latest()
+            ->get();
         return response()->json(['posts' => $posts]);
     }
 
@@ -39,9 +43,12 @@ class ForumPostController extends Controller
 
         $post->save();
 
+        $post->load('user');
+        $post->likes_count = 0;
+
         return response()->json([
             'success' => true,
-            'post' => $post->load('user'),
+            'post' => $post,
         ]);
     }
 
@@ -101,9 +108,12 @@ class ForumPostController extends Controller
             'content' => $request->content,
         ]);
 
+        $reply->load('user');
+
         return response()->json([
             'success' => true,
-            'reply' => $reply->load('user'),
+            'reply' => $reply,
+            'repliesCount' => $post->replies()->count(),
         ]);
     }
 
@@ -112,10 +122,57 @@ class ForumPostController extends Controller
         $user = auth()->user();
         $liked = $post->likes()->toggle($user->id);
 
+        $likesCount = $post->likes()->count();
+
         return response()->json([
             'success' => true,
             'liked' => $liked['attached'] ? true : false,
-            'likesCount' => $post->likes()->count(),
+            'likesCount' => $likesCount,
+        ]);
+    }
+
+    public function editReply(ForumReply $reply)
+    {
+        $this->authorize('update', $reply);
+        return response()->json(['reply' => $reply]);
+    }
+
+    public function updateReply(Request $request, ForumReply $reply)
+    {
+        $this->authorize('update', $reply);
+        
+        $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $reply->update([
+            'content' => $request->content,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'reply' => $reply->fresh()->load('user'),
+        ]);
+    }
+
+    public function deleteReply(ForumReply $reply)
+    {
+        $this->authorize('delete', $reply);
+        
+        $post = $reply->post;
+        
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Associated post not found.',
+            ], 404);
+        }
+        
+        $reply->delete();
+
+        return response()->json([
+            'success' => true,
+            'repliesCount' => $post->replies()->count(),
         ]);
     }
 }

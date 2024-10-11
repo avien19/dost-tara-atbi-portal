@@ -77,7 +77,6 @@ Route::middleware(['auth'])->group(function () {
 // require __DIR__.'/auth.php';
 
 Route::post('/community/{post}/like', [ForumPostController::class, 'like'])->name('community.like');
-
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post('/mentor-requests/{requestId}/approve', [AdminController::class, 'handleMentorRequestApproval'])->name('admin.mentorRequests.approve');
@@ -90,3 +89,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 });
+Route::get('/community/{reply}/edit', [ForumPostController::class, 'editReply'])->name('community.reply.edit');
+Route::put('/community/reply/{reply}', [ForumPostController::class, 'updateReply'])->name('community.reply.update');
+Route::delete('/community/{reply}', [ForumPostController::class, 'deleteReply'])->name('community.reply.delete');
+Route::delete('/community/reply/{reply}', [ForumPostController::class, 'deleteReply'])->name('community.reply.delete');

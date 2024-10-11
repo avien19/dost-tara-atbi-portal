@@ -1,17 +1,20 @@
-import defaultTheme from 'tailwindcss/defaultTheme';
-import forms from '@tailwindcss/forms';
-
-/** @type {import('tailwindcss').Config} */
 export default {
     content: [
-        './resources/**/*.blade.php',
-        './resources/**/*.js',
-        './resources/**/*.vue',
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
     ],
-
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                customGreen: {
+                    DEFAULT: "#1A4D1C",
+                    500: "#1A4D1C",
+                    600: "#164017",
+                    700: "#123313",
+                },
+            },
+        },
     },
-
     plugins: [],
 };

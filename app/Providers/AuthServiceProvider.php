@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+use App\Models\ForumPost;
+use App\Policies\ForumPostPolicy;
+use App\Models\ForumReply;
+use App\Policies\ForumReplyPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -14,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         ForumPost::class => ForumPostPolicy::class,
+        ForumReply::class => ForumReplyPolicy::class,
     ];
 
     /**
@@ -21,6 +26,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registerPolicies();
     }
 }

@@ -9,7 +9,7 @@
                 </div>
             </div>
             <p class="text-sm text-gray-600 mt-2">Great work on this assignment! Your understanding of the core concepts is evident. Consider exploring more advanced topics in future projects.</p>
-            <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">View Detailed Feedback</button>
+            <button class="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">View Detailed Feedback</button>
         </div>
     @endforeach
 </div>
